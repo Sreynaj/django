@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
 
-urllpatterns = [
+urlpatterns = [
     path('hello/', views.say_hello)
 ]
