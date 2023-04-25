@@ -154,10 +154,7 @@ class Join:
         new_parent_alias = change_map.get(self.parent_alias, self.parent_alias)
         new_table_alias = change_map.get(self.table_alias, self.table_alias)
         if self.filtered_relation is not None:
-            filtered_relation = self.filtered_relation.clone()
-            filtered_relation.path = [
-                change_map.get(p, p) for p in self.filtered_relation.path
-            ]
+            filtered_relation = self.filtered_relation.relabeled_clone(change_map)
         else:
             filtered_relation = None
         return self.__class__(
@@ -187,10 +184,6 @@ class Join:
 
     def __hash__(self):
         return hash(self.identity)
-
-    def equals(self, other):
-        # Ignore filtered_relation in equality check.
-        return self.identity[:-1] == other.identity[:-1]
 
     def demote(self):
         new = self.relabeled_clone({})
@@ -242,6 +235,3 @@ class BaseTable:
 
     def __hash__(self):
         return hash(self.identity)
-
-    def equals(self, other):
-        return self.identity == other.identity
